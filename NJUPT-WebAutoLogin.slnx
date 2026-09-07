@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/解决方案项/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="AutoLogin/AutoLogin.csproj" Id="faa83b60-a712-43db-ab20-a81910b93c58" />
+</Solution>
