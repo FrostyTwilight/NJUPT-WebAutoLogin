@@ -14,12 +14,7 @@ int[] ports = [
     802, 804
 ];
 
-List<(string name, string id)> networks = [
-    ("校园网（收费）", ""),
-    ("中国电信", "@njxy"),
-    ("中国联通", "@njlt"),
-    ("中国移动", "@njyd")
-    ];
+
 
 var infoRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "njupt_webautologin");
 Directory.CreateDirectory(infoRoot);
@@ -149,18 +144,31 @@ var program_index = configData["program_index"].ToString();
 var rcn = configData["rcn"]?.ToString();
 
 string wlan_ip;
+List<(string name, string id)> networks;
 
-if(rcn != null)
+if (rcn != null)
 {
     AnsiConsole.MarkupLine("接口1");
     var ipJson = await GetStringAsync("eportal/portal/index/getClientIp");
     wlan_ip = ipJson["wlan_user_ip"].ToString();
+
+    networks = [
+    ("校园网（收费）", ""),
+    ("中国电信", "@njxy"),
+    ("中国移动", "@njyd")
+    ];
 }
 else
 {
     AnsiConsole.MarkupLine("接口2");
     var htm = await GetStringRawAsync($"https://{REMOTE_IP}");
     wlan_ip = v4ipRegex.Match(htm).Groups["ip"].Value;
+
+    networks = [
+    ("校园网（收费）", ""),
+    ("中国电信", "@njxy"),
+    ("中国移动", "@cmcc")
+    ];
 }
 
 Debug.Assert(!string.IsNullOrWhiteSpace(wlan_ip));
