@@ -48,20 +48,32 @@ AnsiConsole.MarkupLine("检查端口...");
 
 int curPort = 0;
 
-foreach (var v in ports)
+for (int i = 0; i < 10; i++)
 {
-    try
+
+    foreach (var v in ports)
     {
-        var sc = new CancellationTokenSource(TimeSpan.FromSeconds(0.5));
-        await client.GetAsync($"https://{REMOTE_IP}:{v}", sc.Token);
-        curPort = v;
-    }catch(Exception ex)
-    {
-        AnsiConsole.MarkupLine($"无法连接端口{v}: [red]{ex.Message}[/]");
+        try
+        {
+            var sc = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+            await client.GetAsync($"https://{REMOTE_IP}:{v}", sc.Token);
+            curPort = v;
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.MarkupLine($"无法连接端口{v}: [red]{ex.Message}[/]");
+        }
     }
+
+    if (curPort != 0)
+    {
+        break;
+    }
+
+    await Task.Delay(TimeSpan.FromSeconds(1));
 }
 
-if(curPort == 0)
+if (curPort == 0)
 {
     AnsiConsole.MarkupLine("[red]无法连接到任何端口！[/]");
     Environment.Exit(-1);
